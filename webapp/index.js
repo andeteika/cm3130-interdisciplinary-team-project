@@ -1,25 +1,28 @@
 // Import packages
 const express = require('express');
+const path = require('path');
 
 
 // Express server
 const app = express();
 
-// Set the view engine to ejs
+// Set the view engine to EJS
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
-// TIP: Use res.render to load up an ejs view file
+// Public folder accessed by EJS (e.g. Bootstrap files)
+app.use(express.static(path.join(__dirname, 'public')));
 
-// index page
+// TIP: Use res.render to load up an EJS view file
+
+// Homepage
 app.get('/', function(req, res) {
-    res.render('pages/index');
+    res.render('index', {message: "Hello World"});
 });
 
-// about page
-app.get('/about', function(req, res) {
-    res.render('pages/about');
-});
-
-
-app.listen(8080);
-console.log('Server is listening on port 8080');
+// Start the server on port 8080
+const PORT = 8080;
+app.listen(PORT, () => {
+    console.log(`Server started on port ${PORT}.`);
+    console.log(`Developer note: if the servers has been start on a local machine, the easy access URL is http://localhost:${PORT}`);
+})
