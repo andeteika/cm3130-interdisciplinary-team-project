@@ -105,10 +105,6 @@ app.get('/sign_in', function(req, res) {
     res.render('pages/log_in', { title: 'Sign In' });
 });
 
-// GET /forum - Render forum page with location-based posts
-app.get('/forum', function(req, res) {
-    res.render('pages/forum', { title: 'Forum', locations, postsByLocation });
-});
 
 // ---------------------------------------------------- POST ROUTES ----------------------------------------------------
 // Allow the Express server to read the body of a POST request.

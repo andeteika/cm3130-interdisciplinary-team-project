@@ -6,3 +6,15 @@
 @use "../node_modules/bootstrap/scss/bootstrap";
 
 // Then add additional custom code here
+
+.carousel .item {
+  height: 500px;
+}
+
+.item img {
+  position: absolute;
+  object-fit:cover;
+  top: 0;
+  left: 0;
+  min-height: 500px;
+}
