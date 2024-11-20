@@ -155,6 +155,11 @@ app.get('/forum', function(req, res) {
     res.render('pages/forum', { title: 'Forum', locations: locations, postsByLocation: postsByLocation });
 });
 
+// GET /map
+app.get('/map', function(req, res) {
+    res.render('pages/map', { title: 'Map' });
+});
+
 
 // ---------------------------------------------------- POST ROUTES ----------------------------------------------------
 
