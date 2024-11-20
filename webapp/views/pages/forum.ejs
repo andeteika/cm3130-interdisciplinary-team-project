@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Include the head of the EJS. Contains the meta tags and stylesheet link -->
+<%- include("../partials/head") %>
+
+    <body class="d-flex flex-column min-vh-100">
+        <!-- Include the header. Common style applies -->
+        <%- include("../partials/navbar") %>
+
+            <!-- ----------------------------------- BEGINNING OF THE BODY OF THE PAGE ----------------------------------------- -->
+            <div class="container mt-4">
+                <h1 class="text-primary mb-4">Location-Based Forum</h1>
+        
+                <!-- New Post Form -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title">Create a New Post</h2>
+                        <form action="/forum/post" method="POST">
+                            <div class="mb-3">
+                                <label for="location" class="form-label">Select Location:</label>
+                                <select name="location" id="location" class="form-select" required>
+                                    <option value="" disabled selected>Select a location</option>
+                                    <% locations.forEach(location => { %>
+                                        <option value="<%= location %>"><%= location %></option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" name="title" class="form-control" placeholder="Post Title" required>
+                            </div>
+                            <div class="mb-3">
+                                <textarea name="content" class="form-control" placeholder="Post Content" rows="5" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </form>
+                    </div>
+                </div>
+        
+                <!-- Display Posts by Location -->
+                <% Object.keys(postsByLocation).forEach(location => { %>
+                    <div class="accordion mb-3" id="accordion-<%= location.replace(/\s+/g, '-') %>">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading-<%= location.replace(/\s+/g, '-') %>">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-<%= location.replace(/\s+/g, '-') %>" aria-expanded="false" aria-controls="collapse-<%= location.replace(/\s+/g, '-') %>">
+                                    <%= location %>
+                                </button>
+                            </h2>
+                            <div id="collapse-<%= location.replace(/\s+/g, '-') %>" class="accordion-collapse collapse" aria-labelledby="heading-<%= location.replace(/\s+/g, '-') %>">
+                                <div class="accordion-body">
+                                    <% if (postsByLocation[location].length === 0) { %>
+                                        <p>No posts available for this location.</p>
+                                    <% } else { %>
+                                        <% postsByLocation[location].forEach(post => { %>
+                                            <div class="card mb-3">
+                                                <div class="card-body">
+                                                    <h3 class="card-title"><%= post.title %></h3>
+                                                    <p class="card-text"><%= post.content %></p>
+        
+                                                    <!-- Replies Section -->
+                                                    <h5 class="mt-4">Replies:</h5>
+                                                    <ul class="list-group mb-3">
+                                                        <% function renderReplies(replies, parentReplyId = '') { %>
+                                                            <% replies.forEach(reply => { %>
+                                                                <li class="list-group-item">
+                                                                    <%= reply.content %>
+                                                                    <form action="/forum/reply/<%= location %>/<%= post.id %>" method="POST" class="mt-2">
+                                                                        <input type="hidden" name="parentReplyId" value="<%= reply.id %>">
+                                                                        <input type="text" name="replyContent" class="form-control" placeholder="Reply to this reply" required>
+                                                                        <button type="submit" class="btn btn-link btn-sm mt-1">Reply</button>
+                                                                    </form>
+                                                                    <% if (reply.replies.length > 0) { %>
+                                                                        <ul class="list-group mt-2">
+                                                                            <% renderReplies(reply.replies, reply.id); %>
+                                                                        </ul>
+                                                                    <% } %>
+                                                                </li>
+                                                            <% }); %>
+                                                        <% } %>
+                                                        <% renderReplies(post.replies); %>
+                                                    </ul>
+        
+                                                    <!-- Reply Form -->
+                                                    <form action="/forum/reply/<%= location %>/<%= post.id %>" method="POST" class="d-flex">
+                                                        <input type="hidden" name="parentReplyId" value="">
+                                                        <input type="text" name="replyContent" class="form-control me-2" placeholder="Add a reply to this post" required>
+                                                        <button type="submit" class="btn btn-primary">Reply</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        <% }); %>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+            <!-- --------------------------------------- END OF THE BODY OF THE PAGE ------------------------------------------- -->
+
+            <!-- Include the footer. Common style applies -->
+            <%- include("../partials/footer") %>
+
+                <!-- Include the scripts-->
+                <%- include("../partials/scripts") %>
+    </body>
+
+</html>
