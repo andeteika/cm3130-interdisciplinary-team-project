@@ -1,0 +1,22 @@
+{
+  "name": "webapp",
+  "version": "1.0.0",
+  "description": "Placement EHub WebApp",
+  "scripts": {
+    "start": "node server.js",
+    "debug": "DEBUG=express:* node server.js",
+    "scss": "sass scss/custom.scss public/css/custom.css"
+  },
+  "author": "Adam Bisinella",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "5.3.3",
+    "cookie-parser": "1.4.7",
+    "dotenv": "16.4.5",
+    "ejs": "3.1.10",
+    "express": "4.21.1",
+    "express-session": "1.18.1",
+    "mongodb": "6.10.0",
+    "sass": "1.69.5"
+  }
+}
