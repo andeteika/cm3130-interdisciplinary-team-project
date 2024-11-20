@@ -56,6 +56,30 @@ app.use("/bootstrap/", express.static(path.join(__dirname, "node_modules/bootstr
 // Allow the Express server to read the body of a POST request.
 app.use(express.urlencoded({ extended: true }));
 
+
+// Location-based post management
+const locations = [
+    "NHS Ayrshire & Arran",
+    "NHS Borders",
+    "NHS Dumfries & Galloway",
+    "NHS Fife",
+    "NHS Forth Valley",
+    "NHS Grampian",
+    "NHS Greater Glasgow & Clyde",
+    "NHS Highland",
+    "NHS Lanarkshire",
+    "NHS Lothian",
+    "NHS Orkney",
+    "NHS Shetland",
+    "NHS Tayside",
+    "NHS Western Isles"
+];
+
+let postsByLocation = {};
+locations.forEach(location => {
+    postsByLocation[location] = [];
+});
+
 // ---------------------------------------------------Login---------------------------------------------------
 
 // Check if the user is logged in
@@ -99,29 +123,6 @@ app.post('/sign_in', (req, res) => {
 
 // --------------------------------------------------- EXPRESS ROUTES --------------------------------------------------
 
-// Location-based post management
-const locations = [
-    "NHS Ayrshire & Arran",
-    "NHS Borders",
-    "NHS Dumfries & Galloway",
-    "NHS Fife",
-    "NHS Forth Valley",
-    "NHS Grampian",
-    "NHS Greater Glasgow & Clyde",
-    "NHS Highland",
-    "NHS Lanarkshire",
-    "NHS Lothian",
-    "NHS Orkney",
-    "NHS Shetland",
-    "NHS Tayside",
-    "NHS Western Isles"
-];
-
-let postsByLocation = {};
-locations.forEach(location => {
-    postsByLocation[location] = [];
-});
-
 // ----------------------------------------------------- GET ROUTES ----------------------------------------------------
 
 // GET /
@@ -132,6 +133,11 @@ app.get('/', function(req, res) {
 // GET /sign_in
 app.get('/sign_in', function(req, res) {
     res.render('pages/log_in', { title: 'Sign In' });
+});
+
+// GET /forum
+app.get('/forum', function(req, res) {
+    res.render('pages/forum', { title: 'Forum', locations: locations, postsByLocation: postsByLocation });
 });
 
 
