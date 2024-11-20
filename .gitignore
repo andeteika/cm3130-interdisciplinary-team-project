@@ -1,0 +1,9 @@
+# Ignore npm folders
+webapp/node_modules
+webapp/package-lock.json
+
+# Ignore JetBrains folders and files
+.idea
+
+# Exclude old versions of the project
+old-versions

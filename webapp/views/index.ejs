@@ -1,13 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Include the head of the EJS. Contains the meta tags and stylesheet link -->
+<%- include("./partials/head") %>
 
-    <title>EPlacement EHub</title>
+<body class="d-flex flex-column min-vh-100">
 
-    <link rel="stylesheet" type="text/css" href="/css/custom.css">
-</head>
-<body>
+<!-- Include the header. Common style applies -->
+<%- include("./partials/navbar") %>
+
+<!-- ----------------------------------- BEGINNING OF THE BODY OF THE PAGE ----------------------------------------- -->
+
+
+
+<!-- --------------------------------------- END OF THE BODY OF THE PAGE ------------------------------------------- -->
+
+<!-- Include the footer. Common style applies -->
+<%- include("./partials/footer") %>
+
+<!-- Include the scripts-->
+<%- include("./partials/scripts") %>
 </body>
 </html>
