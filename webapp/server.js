@@ -71,6 +71,11 @@ app.get('/sign_in', function(req, res) {
     res.render('pages/log_in', { title: 'Sign In' });
 });
 
+// GET /accommodation
+app.get('/accommodation', function(req, res) {
+    res.render('pages/accommodation', { title: 'Accommodation' });
+});
+
 // ---------------------------------------------------- POST ROUTES ----------------------------------------------------
 // Allow the Express server to read the body of a POST request.
 app.use(express.urlencoded({extended: true}));
