@@ -2,11 +2,10 @@
 const express = require('express');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
-const {MongoClient} = require('mongodb');
+const { MongoClient } = require('mongodb');
 const dotenv = require('dotenv');
 const crypto = require('crypto');
-const path = require('path')
-
+const path = require('path');
 
 // --------------------------------------------------- INITIALISATION --------------------------------------------------
 // Initialise Dotenv
@@ -40,13 +39,9 @@ let users;
 const client = new MongoClient(ATLAS_URI);
 
 (async function connect() {
-    // await client.connect()
-    //     .then(() => console.log('MongoDB client connected.'))
-    //     .catch(promise => console.error('MongoDB client NOT connected', promise));
-    // users = client.db('Placement-Hub').collection('users');
-
+    // MongoDB connection code (optional based on requirements)
     app.listen(port, () => console.log(`Express server running on port ${port}.`));
-    console.log(`Express server running on http://localhost:${port}.`)
+    console.log(`Express server running on http://localhost:${port}.`);
 })();
 
 // Set the view engine to EJS
@@ -59,6 +54,30 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use("/bootstrap/", express.static(path.join(__dirname, "node_modules/bootstrap/")));
 
 // --------------------------------------------------- EXPRESS ROUTES --------------------------------------------------
+
+// Location-based post management
+const locations = [
+    "NHS Ayrshire & Arran",
+    "NHS Borders",
+    "NHS Dumfries & Galloway",
+    "NHS Fife",
+    "NHS Forth Valley",
+    "NHS Grampian",
+    "NHS Greater Glasgow & Clyde",
+    "NHS Highland",
+    "NHS Lanarkshire",
+    "NHS Lothian",
+    "NHS Orkney",
+    "NHS Shetland",
+    "NHS Tayside",
+    "NHS Western Isles"
+];
+
+let postsByLocation = {};
+locations.forEach(location => {
+    postsByLocation[location] = [];
+});
+
 // ----------------------------------------------------- GET ROUTES ----------------------------------------------------
 
 // GET /
@@ -71,6 +90,32 @@ app.get('/sign_in', function(req, res) {
     res.render('pages/log_in', { title: 'Sign In' });
 });
 
+// GET /form - Render form with location-based posts
+app.get('/form', function(req, res) {
+    res.render('pages/form', { title: 'Form', locations, postsByLocation });
+});
+
 // ---------------------------------------------------- POST ROUTES ----------------------------------------------------
 // Allow the Express server to read the body of a POST request.
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
+
+// POST /form/post - Add a post to a specific location
+app.post('/form/post', function(req, res) {
+    const { location, title, content } = req.body;
+    if (postsByLocation[location]) {
+        postsByLocation[location].push({ title, content, replies: [] });
+    }
+    res.redirect('/form');
+});
+
+// POST /form/reply/:location/:id - Add a reply to a specific post in a specific location
+app.post('/form/reply/:location/:id', function(req, res) {
+    const { location, id } = req.params;
+    const replyContent = req.body.reply;
+
+    if (postsByLocation[location] && postsByLocation[location][id]) {
+        postsByLocation[location][id].replies.push(replyContent);
+    }
+
+    res.redirect('/form');
+});
