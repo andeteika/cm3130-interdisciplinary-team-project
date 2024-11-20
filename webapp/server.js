@@ -120,6 +120,21 @@ app.post('/sign_in', (req, res) => {
     });
 });
 
+// Add reply helper function
+function addReplyToReplies(replies, replyId, newReply) {
+    for (let reply of replies) {
+        if (reply.id === replyId) {
+            reply.replies.push(newReply);
+            return true;
+        }
+        if (reply.replies.length > 0) {
+            const added = addReplyToReplies(reply.replies, replyId, newReply);
+            if (added) return true;
+        }
+    }
+    return false;
+}
+
 
 // --------------------------------------------------- EXPRESS ROUTES --------------------------------------------------
 
