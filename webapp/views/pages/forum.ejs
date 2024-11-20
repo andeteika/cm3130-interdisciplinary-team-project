@@ -10,13 +10,13 @@
 
             <!-- ----------------------------------- BEGINNING OF THE BODY OF THE PAGE ----------------------------------------- -->
             <div class="container mt-4">
-                <h1 class="text-primary mb-4">Location-Based</h1>
+                <h1 class="text-primary mb-4">Location-Based Forum</h1>
         
                 <!-- New Post Form -->
                 <div class="card mb-4">
                     <div class="card-body">
                         <h2 class="card-title">Create a New Post</h2>
-                        <form action="/form/post" method="POST">
+                        <form action="/forum/post" method="POST">
                             <div class="mb-3">
                                 <label for="location" class="form-label">Select Location:</label>
                                 <select name="location" id="location" class="form-select" required>
@@ -51,7 +51,7 @@
                                     <% if (postsByLocation[location].length === 0) { %>
                                         <p>No posts available for this location.</p>
                                     <% } else { %>
-                                        <% postsByLocation[location].forEach((post, index) => { %>
+                                        <% postsByLocation[location].forEach(post => { %>
                                             <div class="card mb-3">
                                                 <div class="card-body">
                                                     <h3 class="card-title"><%= post.title %></h3>
@@ -60,14 +60,30 @@
                                                     <!-- Replies Section -->
                                                     <h5 class="mt-4">Replies:</h5>
                                                     <ul class="list-group mb-3">
-                                                        <% post.replies.forEach(reply => { %>
-                                                            <li class="list-group-item"><%= reply %></li>
-                                                        <% }); %>
+                                                        <% function renderReplies(replies, parentReplyId = '') { %>
+                                                            <% replies.forEach(reply => { %>
+                                                                <li class="list-group-item">
+                                                                    <%= reply.content %>
+                                                                    <form action="/forum/reply/<%= location %>/<%= post.id %>" method="POST" class="mt-2">
+                                                                        <input type="hidden" name="parentReplyId" value="<%= reply.id %>">
+                                                                        <input type="text" name="replyContent" class="form-control" placeholder="Reply to this reply" required>
+                                                                        <button type="submit" class="btn btn-link btn-sm mt-1">Reply</button>
+                                                                    </form>
+                                                                    <% if (reply.replies.length > 0) { %>
+                                                                        <ul class="list-group mt-2">
+                                                                            <% renderReplies(reply.replies, reply.id); %>
+                                                                        </ul>
+                                                                    <% } %>
+                                                                </li>
+                                                            <% }); %>
+                                                        <% } %>
+                                                        <% renderReplies(post.replies); %>
                                                     </ul>
         
                                                     <!-- Reply Form -->
-                                                    <form action="/form/reply/<%= location %>/<%= index %>" method="POST" class="d-flex">
-                                                        <input type="text" name="reply" class="form-control me-2" placeholder="Add a reply" required>
+                                                    <form action="/forum/reply/<%= location %>/<%= post.id %>" method="POST" class="d-flex">
+                                                        <input type="hidden" name="parentReplyId" value="">
+                                                        <input type="text" name="replyContent" class="form-control me-2" placeholder="Add a reply to this post" required>
                                                         <button type="submit" class="btn btn-primary">Reply</button>
                                                     </form>
                                                 </div>

@@ -78,6 +78,21 @@ locations.forEach(location => {
     postsByLocation[location] = [];
 });
 
+// Function to add a reply to a specific reply recursively
+function addReplyToReplies(replies, replyId, newReply) {
+    for (let reply of replies) {
+        if (reply.id === replyId) {
+            reply.replies.push(newReply);
+            return true;
+        }
+        if (reply.replies.length > 0) {
+            const added = addReplyToReplies(reply.replies, replyId, newReply);
+            if (added) return true;
+        }
+    }
+    return false;
+}
+
 // ----------------------------------------------------- GET ROUTES ----------------------------------------------------
 
 // GET /
@@ -90,32 +105,48 @@ app.get('/sign_in', function(req, res) {
     res.render('pages/log_in', { title: 'Sign In' });
 });
 
-// GET /form - Render form with location-based posts
-app.get('/form', function(req, res) {
-    res.render('pages/form', { title: 'Form', locations, postsByLocation });
+// GET /forum - Render forum page with location-based posts
+app.get('/forum', function(req, res) {
+    res.render('pages/forum', { title: 'Forum', locations, postsByLocation });
 });
 
 // ---------------------------------------------------- POST ROUTES ----------------------------------------------------
 // Allow the Express server to read the body of a POST request.
 app.use(express.urlencoded({ extended: true }));
 
-// POST /form/post - Add a post to a specific location
-app.post('/form/post', function(req, res) {
+// POST /forum/post - Add a post to a specific location
+app.post('/forum/post', function(req, res) {
     const { location, title, content } = req.body;
     if (postsByLocation[location]) {
-        postsByLocation[location].push({ title, content, replies: [] });
+        postsByLocation[location].push({
+            id: crypto.randomUUID(),
+            title,
+            content,
+            replies: []
+        });
     }
-    res.redirect('/form');
+    res.redirect('/forum');
 });
 
-// POST /form/reply/:location/:id - Add a reply to a specific post in a specific location
-app.post('/form/reply/:location/:id', function(req, res) {
-    const { location, id } = req.params;
-    const replyContent = req.body.reply;
+// POST /forum/reply/:location/:postId - Add a reply to a specific post or reply
+app.post('/forum/reply/:location/:postId', function(req, res) {
+    const { location, postId } = req.params;
+    const { parentReplyId, replyContent } = req.body;
 
-    if (postsByLocation[location] && postsByLocation[location][id]) {
-        postsByLocation[location][id].replies.push(replyContent);
+    if (postsByLocation[location]) {
+        const post = postsByLocation[location].find(p => p.id === postId);
+        if (post) {
+            const newReply = { id: crypto.randomUUID(), content: replyContent, replies: [] };
+
+            if (parentReplyId) {
+                // Add reply to an existing reply
+                addReplyToReplies(post.replies, parentReplyId, newReply);
+            } else {
+                // Add reply to the post itself
+                post.replies.push(newReply);
+            }
+        }
     }
 
-    res.redirect('/form');
+    res.redirect('/forum');
 });
