@@ -1,9 +1,3 @@
-//Imports marker data from markers.js
-// import {majorArenas, majorMVPs, majorMedals } from './markers.js';
-
-//Imports the API to call players related to their country
-// import { getPlayersFromAPI } from './getPlayers.js';
-
 //Map initialisation
 var map = L.map('map').setView([40, 7], 3);
 var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -37,13 +31,28 @@ var baseMaps = {
 
 //Toggleable Markers
 
-//CHANGE THE NAMES HERE//CHANGE THE NAMES HERE//CHANGE THE NAMES HERE//CHANGE THE NAMES HERE//CHANGE THE NAMES HERE//CHANGE THE NAMES HERE
-let majorArray = returnMarkers();
+let nhsArray = returnMarkers();
 
 var overlayMaps = {
-    "Major Venues": majorArray[0],
-    "Major MVPs" : majorArray[1],
-    "Major Medals": majorArray[2],
+    "Ayrshire Placements": nhsArray[0],
+    "Borders Placements" : nhsArray[1],
+    "Dumfries Placements": nhsArray[2],
+    "Fife Placements"    : nhsArray[3],
+    "Grampian Placements": nhsArray[4],
+    "Morray Placements"  : nhsArray[5],
+    "Greater Glasgow Placements": nhsArray[6],
+    "Highlands Placements": nhsArray[7],
+    "Lanarkshire Placements": nhsArray[8],
+    "Lothian Placements" : nhsArray[9],
+    "Shetland Placements": nhsArray[10],
+    "Tayside Placements" : nhsArray[11],
+    "Western Isles Placements": nhsArray[12],
+    "Non-NHS Placements" : nhsArray[13],
+    "Tayside Residence"  : nhsArray[14],
+    "Shetland Residence" : nhsArray[15],
+    "Highlands Residence": nhsArray[16],
+    "Morray Residence"   : nhsArray[17],
+    "Grampian Residence" : nhsArray[18],
 };
 
 var layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);

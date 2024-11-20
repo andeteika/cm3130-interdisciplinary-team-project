@@ -426,4 +426,82 @@ function returnMarkers() {
     //nonNHS array
     var nonNHS = L.layerGroup([aberdeenFC, albyn, caledonianPhysio, fernbraeBMI, healPhysio, oxygenWorks, stJohnstone, physioRGU, exerciseRGU]);
 
+
+
+    //PLACEMENT RESIDENCES========================================================================================================================================================
+
+    //NHS Tayside
+    //both ninewells are the same
+    var ninewellsResidence = L.marker([56.4626058985445, -3.0369208539860773]);
+    ninewellsResidence.bindPopup("<b>Ninewells Nursing Residence</b><br>Contact Name: Wendy Valentine<br>Contact Details: 01382632107 Extension 32107<br>");
+
+    var abertayResidence = L.marker([56.46330192138707, -2.9739388800704125]);
+    abertayResidence.bindPopup("<b>Abertay University</b><br>Contact Name: N/A<br>Contact Details:01382308059<br>");
+
+    var westResidence = L.marker([56.45668206149013, -3.008951603782257]);
+    westResidence.bindPopup("<b>West Park Flats & Villas</b><br>Contact Name:Sanctuary Management Services<br>Contact Details:01382573111<br>");
+
+    var perthResidence = L.marker([56.397350090801105, -3.4562866175656306]);
+    abertayResidence.bindPopup("<b>Accomodation at Perth Royal Infirmary</b><br>Contact Name: N/A<br>Contact Details:01738473207<br>");
+
+
+    //tayside residence array
+    var residenceTayside = L.layerGroup([ninewellsResidence, abertayResidence, westResidence, perthResidence]);
+
+
+    //NHS Shetland
+    var gilbertResidence = L.marker([60.15092437349327, -1.1559274199722125]);
+    gilbertResidence.bindPopup("<b>Gilbert Bain Hospital</b><br>Contact Name: N/A<br>Contact Details:01595743000<br>");
+
+
+    //shetland residence array
+    var residenceShetland = L.layerGroup([gilbertResidence]);
+
+
+    //NHS Highland
+    //nairn no address, wick/dornoch no address, highland no address x2, innseagan doesnt exist anymore,  lochybridge no address
+    var raigmoreResidence = L.marker([57.47437186483149, -4.193386527967032]);
+    raigmoreResidence.bindPopup("<b>Raigmore Hospital Staff Accommodation</b><br>Contact Name: N/A<br>Contact Details:01463 704350 UHB.RaigmoreAccommodation@nhs.net<br>");
+
+    var fortResidence = L.marker([56.818168685353875, -5.108437034196546]);
+    fortResidence.bindPopup("<b>Bank Street Lodge</b><br>Contact Name: N/A<br>Contact Details:01397700070<br>");
+
+    var alexandraResidence = L.marker([56.81934917388446, -5.1062874555897695]);
+    alexandraResidence.bindPopup("<b>Alexandra Hotel</b><br>Contact Name: Reception<br>Contact Details:01397702241<br>");
+
+    var rosedeneResidence = L.marker([57.97494358495765, -3.971492564446297]);
+    rosedeneResidence.bindPopup("<b>Rosedene B&B</b><br>Contact Name: N/A<br>Contact Details:01397702254<br>");
+
+
+    //highland residence array
+    var residenceHighland = L.layerGroup([raigmoreResidence, fortResidence, alexandraResidence, rosedeneResidence]);
+
+
+    //NHS Grampian Moray
+    var maldaResidence = L.marker([57.64630680734482, -3.3126410414559824]);
+    maldaResidence.bindPopup("<b>Malda View</b><br>Contact Name: N/A<br>Contact Details:01343548267<br>");
+
+    var killinResidence = L.marker([57.64400151955345, -3.3208268660679816]);
+    killinResidence.bindPopup("<b>Killin</b><br>Contact Name: N/A<br>Contact Details:01343550889<br>");
+
+    var ardvoResidence = L.marker([57.646268382621216, -3.3241218496795097]);
+    ardvoResidence.bindPopup("<b>Ardvorlich Guest House</b><br>Contact Name: N/A<br>Contact Details:01343556064 bookings@ardvorlich.com<br>");
+
+
+    //grampian moray residence array
+    var residenceMorray = L.layerGroup([maldaResidence, killinResidence, ardvoResidence]);
+
+
+    //NHS Grampian
+    //josie no info, glasgow no info x2,
+    var havannahResidence = L.marker([55.85867963096294, -4.234994190089401]);
+    havannahResidence.bindPopup("<b>Havannah House</b><br>Contact Name: N/A<br>Contact Details: N/A<br>");
+
+
+    //grampian residence array
+    var residenceGrampian = L.layerGroup([havannahResidence]);
+
+    return[nhsAyrshire, nhsBorders, nhsDumfries, nhsFife, nhsGrampian, nhsMorray, nhsGreaterGlasgow, nhsHighland, nhsLanarkshire, nhsLothian, nhsShetland,
+            nhsTayside, nhsWestern, nonNHS, residenceTayside, residenceShetland, residenceHighland, residenceMorray, residenceGrampian];
+
 }
