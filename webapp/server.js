@@ -53,6 +53,50 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Use the contents of 'bootstrap/dist/' which is placed in your node_modules folder as if it is in your '/styles/css' directory.
 app.use("/bootstrap/", express.static(path.join(__dirname, "node_modules/bootstrap/")));
 
+// Allow the Express server to read the body of a POST request.
+app.use(express.urlencoded({ extended: true }));
+
+// ---------------------------------------------------Login---------------------------------------------------
+
+// Check if the user is logged in
+function checkAuthenticated(req, res, next) {
+    if (req.session && req.session.user) {
+        // User is logged in
+        return next();
+    }
+    // User is not logged in, redirect to login page
+    res.redirect('/sign_in');
+}
+
+// Apply to all routes except `/` and `/sign_in`
+app.use((req, res, next) => {
+    if (req.path === '/' || req.path === '/sign_in') {
+        return next();
+    }
+    checkAuthenticated(req, res, next);
+});
+
+// POST /sign_in - Authenticate user and start session
+app.post('/sign_in', (req, res) => {
+    const { email, password } = req.body;
+
+    // Static credentials for admin user
+    const adminEmail = "admin";
+    const adminPassword = "admin";
+
+    if (email === adminEmail && password === adminPassword) {
+        req.session.user = { email }; // Store user info in session
+        return res.redirect('/forum'); // Redirect to forum after successful login
+    }
+
+    // If authentication fails, redirect back to login with a failure message
+    res.render('pages/log_in', {
+        title: 'Sign In',
+        errorMessage: 'Invalid email or password. Please try again.',
+    });
+});
+
+
 // --------------------------------------------------- EXPRESS ROUTES --------------------------------------------------
 
 // Location-based post management
@@ -78,21 +122,6 @@ locations.forEach(location => {
     postsByLocation[location] = [];
 });
 
-// Function to add a reply to a specific reply recursively
-function addReplyToReplies(replies, replyId, newReply) {
-    for (let reply of replies) {
-        if (reply.id === replyId) {
-            reply.replies.push(newReply);
-            return true;
-        }
-        if (reply.replies.length > 0) {
-            const added = addReplyToReplies(reply.replies, replyId, newReply);
-            if (added) return true;
-        }
-    }
-    return false;
-}
-
 // ----------------------------------------------------- GET ROUTES ----------------------------------------------------
 
 // GET /
@@ -111,8 +140,6 @@ app.get('/forum', function(req, res) {
 });
 
 // ---------------------------------------------------- POST ROUTES ----------------------------------------------------
-// Allow the Express server to read the body of a POST request.
-app.use(express.urlencoded({ extended: true }));
 
 // POST /forum/post - Add a post to a specific location
 app.post('/forum/post', function(req, res) {
