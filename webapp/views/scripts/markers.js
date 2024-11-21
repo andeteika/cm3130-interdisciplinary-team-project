@@ -177,7 +177,7 @@ function returnMarkers() {
 
 
     //moray array
-    var nhsMorray = L.layergroup([morayCommunity]);
+    var nhsMorray = L.layerGroup([morayCommunity]);
 
 
     //NHS Greater Glasgow & Clyde
