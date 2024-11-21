@@ -199,3 +199,6 @@ app.post('/forum/reply/:location/:postId', function(req, res) {
 
     res.redirect('/forum');
 });
+
+// ---------------------------------------------------- MAP ----------------------------------------------------
+app.use('/scripts', express.static(path.join(__dirname, 'views/scripts')));
